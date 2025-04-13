@@ -32,5 +32,6 @@ variable "scale_in_statistic" {}
 variable "scale_in_period" {}
 variable "scale_in_evaluation_periods" {}
 variable "scale_in_cooldown" {}
+variable "scale_tracking_cpu" {}
 
 
