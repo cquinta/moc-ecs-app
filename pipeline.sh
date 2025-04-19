@@ -108,8 +108,11 @@ cd ../terraform
 echo "TERRAFORM - FORMAT CHECK"
 terraform fmt --recursive --check
 
+set -e
+
 # Initialize Terraform with backend config
-#terraform init -backend-config=environment/$BRANCH_NAME/backend.tfvars
+
+terraform init -backend-config=environment/$BRANCH_NAME/backend.tfvars
 
 # Validate Terraform configuration
 echo "TERRAFORM - VALIDATE"
