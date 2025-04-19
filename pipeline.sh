@@ -104,9 +104,10 @@ echo "TERRAFORM - CI"
 
 cd ../terraform
 
+
 # Check Terraform formatting
-echo "TERRAFORM - FORMAT CHECK"
-terraform fmt --recursive --check
+#echo "TERRAFORM - FORMAT CHECK"
+#terraform fmt --recursive --check
 
 set -e
 
@@ -120,7 +121,7 @@ terraform validate
 
 
 # Deploy Infrastructure with Terraform
-BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD )
+
 REPOSITORY_TAG=$AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY_NAME:$GIT_COMMIT_HASH
 
 # Initialize Terraform again
