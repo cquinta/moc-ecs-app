@@ -1,5 +1,5 @@
 module "service" {
-  source                        = "/home/cquinta/linuxtips/aws-containers/ecs-service-module"
+  source                        = "github.com/cquinta/ecs-service-module?ref=v1"
   region                        = var.region
   cluster_name                  = var.cluster_name
   service_name                  = var.service_name

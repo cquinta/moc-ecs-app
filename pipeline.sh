@@ -95,14 +95,19 @@ docker tag app:latest $AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY_N
 echo "BUILD - DOCKER PUBLISH"
 docker push $AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY_NAME:$GIT_COMMIT_HASH
 
+REPOSITORY_TAG=$AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY_NAME:$GIT_COMMIT_HASH
+
+
+echo "TERRAFORM - CI" 
+
 # Deploy Infrastructure with Terraform
 cd ../terraform
 
-REPOSITORY_TAG=$AWS_ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY_NAME:$GIT_COMMIT_HASH
+terraform init -backend-config=environment/$BRANCH_NAME/backend.tfvars
 
-# Initialize Terraform again
-echo "DEPLOY - TERRAFORM INIT"
-terraform init -backend-config=environment/dev/backend.tfvars
+echo "TERRFORM - FORMAT CHECK"
+
+terraform fmt --recursive --check
 
 # Plan Terraform changes
 echo "DEPLOY - TERRAFORM PLAN"
