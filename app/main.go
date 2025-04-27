@@ -13,7 +13,7 @@ func main() {
 	app := fiber.New()
 
 	app.Get("/version", func(c *fiber.Ctx) error {
-		return c.SendString("v11")
+		return c.SendString("v12")
 	})
 
 	app.Get("/healthcheck", func(c *fiber.Ctx) error {
