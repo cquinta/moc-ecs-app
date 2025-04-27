@@ -51,7 +51,7 @@ variable "ssm_alb" {
 }
 
 variable "container_image" {
-  
+
 }
 
 
