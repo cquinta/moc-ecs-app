@@ -1,0 +1,14 @@
+name: CI/CD Pipeline - Dev
+
+on:
+    push:
+        branches:
+            - dev
+
+env: 
+    AWS_ACCOUNT: "707257249187"
+    AWS_REGION: "us-east-1"
+    APP_NAME: "linuxtips-app"
+    CLUSTER_NAME: "linuxtips-ecs" 
+    REPOSITORY_NAME: "linuxtip/$APP_NAME"
+    
