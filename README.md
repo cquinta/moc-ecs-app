@@ -4,7 +4,7 @@ A containerized Go web service that provides file storage capabilities with AWS 
 
 This project combines a Go-based file storage microservice with Infrastructure as Code (IaC) using Terraform for AWS ECS deployment. The service provides endpoints for file upload, retrieval, and listing operations while leveraging AWS ECS for container orchestration, ECR for container registry, and EFS for persistent storage. The infrastructure includes auto-scaling capabilities based on CPU utilization and request volume.
 
-## Repository Structure
+## Repository Structure graph
 ```
 .
 ├── app/                          # Application source code directory
