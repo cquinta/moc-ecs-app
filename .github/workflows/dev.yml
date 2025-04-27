@@ -51,7 +51,7 @@ jobs:
           working-directory: ./terraform
         
         - name: Terraform Init
-          run: terraform init -backend-config=environment/dev/backend.tfvars
+          run: terraform init -backend-config=environment/${GITHUB_REF_NAME}/backend.tfvars
           working-directory: ./terraform
           env:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -65,3 +65,49 @@ jobs:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             AWS_REGION:  ${{ env.AWS_REGION }}
+
+    build-publish:
+        runs-on: ubuntu-latest
+        needs:
+            - ci-app
+            - ci-terraform
+        steps:
+        - name: checkout repository
+          uses: actions/checkout@v4
+
+        - name: Login to Amazon ECR Private
+          id: login-ecr
+          uses: aws-actions/amazon-ecr-login@v2
+      
+          env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_REGION:  ${{ env.AWS_REGION }}
+
+        - name: Build Image
+          run: docker build -t app . 
+          working-directory: ./app
+
+        - name: Create ECR repository if not exists
+          run: |
+            set +e
+            REPO_EXISTS=$(aws ecr describe-repositories --repository-names ${{ env.REPOSITORY_NAME }} 2>&1)
+            if [[ $REPO_EXISTS == *"RepositoryNotFoundException"* ]]; then
+                echo "Repositório ${{ env.REPOSITORY_NAME }} não encontrado. Criando..."
+                aws ecr create-repository --repository-name ${{ env.REPOSITORY_NAME }}
+            else
+                echo "Repositório ${{ env.REPOSITORY_NAME }} já existe."
+            fi
+            set -e
+          env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_REGION: ${{ env.AWS_REGION }}
+
+        - name: Tag Image
+          run: docker tag app:latest ${{ env.AWS_ACCOUNT }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.REPOSITORY_NAME }}:${GITHUB_SHA::8}
+          working-directory: ./app
+
+        - name: Publish Image
+          run: docker push ${{ env.AWS_ACCOUNT }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.REPOSITORY_NAME }}:${GITHUB_SHA::8}
+          working-directory: ./app
