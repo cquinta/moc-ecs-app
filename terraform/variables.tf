@@ -54,6 +54,6 @@ variable "container_image" {
 
 }
 
-variable "efs_volumes" {}
+
 
 
