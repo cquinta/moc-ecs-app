@@ -48,8 +48,15 @@ module "service" {
 
   ]
 
- 
-
+  efs_volumes = [
+    {
+      volume_name      = "volume-de-exemplo"
+      file_system_id   = aws_efs_file_system.main.id
+      file_system_root = "/"
+      mount_point      = "/mnt/efs"
+      read_only        = false
+    }
+ ]
 
 }
 
