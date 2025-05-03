@@ -35,6 +35,16 @@ module "service" {
 
   scale_tracking_cpu = var.scale_tracking_cpu
 
+  efs_volumes = [
+    {
+      volume_name      = "volume-de-exemplo"
+      file_system_id   = aws_efs_file_system.main.id
+      file_system_root = "/"
+      mount_point      = "/mnt/efs"
+      read_only        = false
+    }
+  ]
+
   alb_arn                 = data.aws_ssm_parameter.alb.value
   scale_tracking_requests = var.scale_tracking_requests
 
@@ -45,5 +55,7 @@ module "service" {
     data.aws_ssm_parameter.private_subnet_3.value,
 
   ]
+
+
 }
 
