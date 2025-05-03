@@ -35,7 +35,7 @@ module "service" {
 
   scale_tracking_cpu = var.scale_tracking_cpu
 
-
+  
 
   alb_arn                 = data.aws_ssm_parameter.alb.value
   scale_tracking_requests = var.scale_tracking_requests
@@ -48,8 +48,7 @@ module "service" {
 
   ]
 
-  efs_volumes = []
-
+ 
 
 
 }
