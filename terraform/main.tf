@@ -1,5 +1,6 @@
 module "service" {
-  source                        = "github.com/cquinta/ecs-service-module?ref=v1.1"
+  #source                        = "github.com/cquinta/ecs-service-module?ref=v1.1"
+  source                        = "github.com/cquinta/ecs-service-module"
   region                        = var.region
   cluster_name                  = var.cluster_name
   service_name                  = var.service_name
